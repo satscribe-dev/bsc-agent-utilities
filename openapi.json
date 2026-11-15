@@ -1,0 +1,343 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "BSC Agent Utilities",
+    "version": "2.0.0",
+    "contact": {
+      "name": "BSC Agent Utilities",
+      "email": "raninndia@gmail.com"
+    },
+    "description": "Cheap lookups for AI agents, pay per call in USDC on Base via x402, no API key: BSC gas + block tip $0.001, token price $0.001, tx status $0.001, contract safety check $0.001, email check $0.001, IP lookup $0.001, domain WHOIS $0.001, QR code PNG $0.001."
+  },
+  "servers": [
+    {
+      "url": "https://bsc-agent-utilities.raninndia.workers.dev"
+    }
+  ],
+  "paths": {
+    "/health": {
+      "get": {
+        "operationId": "healthCheck",
+        "summary": "Free health check",
+        "description": "Free health check, no payment required. Lists all paid routes and their prices.",
+        "security": [],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/v1/gas": {
+      "get": {
+        "operationId": "getGasPrice",
+        "summary": "BSC gas price + latest block",
+        "description": "Returns the current BSC gas price, latest block number and estimated transaction costs in BNB. No input parameters.",
+        "parameters": [],
+        "x-payment-info": {
+          "scheme": "exact",
+          "network": "eip155:8453",
+          "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+          "amount": "1000",
+          "payTo": "0x3B5eC5a983576FCD98275Ff1604a1182ec5B5617",
+          "description": "$0.001 USDC on Base per call"
+        },
+        "responses": {
+          "200": {
+            "description": "Gas price, block tip, tx costs in BNB (paid)"
+          },
+          "402": {
+            "description": "Payment required - $0.001 USDC on Base"
+          }
+        }
+      }
+    },
+    "/v1/token-price": {
+      "get": {
+        "operationId": "getTokenPrice",
+        "summary": "Token price via DexScreener (BSC-first)",
+        "x-payment-info": {
+          "scheme": "exact",
+          "network": "eip155:8453",
+          "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+          "amount": "1000",
+          "payTo": "0x3B5eC5a983576FCD98275Ff1604a1182ec5B5617",
+          "description": "$0.001 USDC on Base per call"
+        },
+        "parameters": [
+          {
+            "name": "address",
+            "in": "query",
+            "required": true,
+            "description": "BSC contract or token address (0x-prefixed, 42 chars)",
+            "schema": {
+              "type": "string",
+              "description": "BSC contract or token address (0x-prefixed, 42 chars)",
+              "example": "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c"
+            },
+            "example": "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Token price, market cap, liquidity (paid)"
+          },
+          "402": {
+            "description": "Payment required - $0.001 USDC on Base"
+          }
+        }
+      }
+    },
+    "/v1/tx": {
+      "get": {
+        "operationId": "getTxStatus",
+        "summary": "BSC transaction status by hash",
+        "x-payment-info": {
+          "scheme": "exact",
+          "network": "eip155:8453",
+          "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+          "amount": "1000",
+          "payTo": "0x3B5eC5a983576FCD98275Ff1604a1182ec5B5617",
+          "description": "$0.001 USDC on Base per call"
+        },
+        "parameters": [
+          {
+            "name": "hash",
+            "in": "query",
+            "required": true,
+            "description": "BSC transaction hash (0x-prefixed, 66 chars)",
+            "schema": {
+              "type": "string",
+              "description": "BSC transaction hash (0x-prefixed, 66 chars)",
+              "example": "0x3e1f4bd9f197743f2a5fcd4a9cd6c0dbdc5517aedb0cd1dcb9b839f57b72c717"
+            },
+            "example": "0x3e1f4bd9f197743f2a5fcd4a9cd6c0dbdc5517aedb0cd1dcb9b839f57b72c717"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Transaction status + receipt (paid)"
+          },
+          "402": {
+            "description": "Payment required - $0.001 USDC on Base"
+          }
+        }
+      }
+    },
+    "/v1/contract-check": {
+      "get": {
+        "operationId": "checkContract",
+        "summary": "Check one BSC contract address",
+        "x-payment-info": {
+          "scheme": "exact",
+          "network": "eip155:8453",
+          "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+          "amount": "1000",
+          "payTo": "0x3B5eC5a983576FCD98275Ff1604a1182ec5B5617",
+          "description": "$0.001 USDC on Base per call"
+        },
+        "parameters": [
+          {
+            "name": "address",
+            "in": "query",
+            "required": true,
+            "description": "BSC contract or token address (0x-prefixed, 42 chars)",
+            "schema": {
+              "type": "string",
+              "description": "BSC contract or token address (0x-prefixed, 42 chars)",
+              "example": "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c"
+            },
+            "example": "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "On-chain facts for the address (paid)"
+          },
+          "400": {
+            "description": "Invalid address"
+          },
+          "402": {
+            "description": "Payment required - $0.001 USDC on Base, x402 exact scheme, payTo 0x3B5eC5a983576FCD98275Ff1604a1182ec5B5617"
+          }
+        }
+      }
+    },
+    "/v1/email-check": {
+      "get": {
+        "operationId": "checkEmail",
+        "summary": "Email format + MX + disposable check",
+        "x-payment-info": {
+          "scheme": "exact",
+          "network": "eip155:8453",
+          "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+          "amount": "1000",
+          "payTo": "0x3B5eC5a983576FCD98275Ff1604a1182ec5B5617",
+          "description": "$0.001 USDC on Base per call"
+        },
+        "parameters": [
+          {
+            "name": "email",
+            "in": "query",
+            "required": true,
+            "description": "Email address to validate (format, MX records, disposable-domain check)",
+            "schema": {
+              "type": "string",
+              "description": "Email address to validate (format, MX records, disposable-domain check)",
+              "example": "hello@example.com"
+            },
+            "example": "hello@example.com"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Email validation result (paid)"
+          },
+          "400": {
+            "description": "Invalid email"
+          },
+          "402": {
+            "description": "Payment required - $0.001 USDC on Base"
+          }
+        }
+      }
+    },
+    "/v1/ip-lookup": {
+      "get": {
+        "operationId": "lookupIp",
+        "summary": "IP geolocation: country, city, ASN, ISP, timezone",
+        "x-payment-info": {
+          "scheme": "exact",
+          "network": "eip155:8453",
+          "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+          "amount": "1000",
+          "payTo": "0x3B5eC5a983576FCD98275Ff1604a1182ec5B5617",
+          "description": "$0.001 USDC on Base per call"
+        },
+        "parameters": [
+          {
+            "name": "ip",
+            "in": "query",
+            "required": true,
+            "description": "IPv4 or IPv6 address to look up (country, city, ASN, ISP, timezone)",
+            "schema": {
+              "type": "string",
+              "description": "IPv4 or IPv6 address to look up (country, city, ASN, ISP, timezone)",
+              "example": "8.8.8.8"
+            },
+            "example": "8.8.8.8"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "IP geolocation result (paid)"
+          },
+          "400": {
+            "description": "Invalid IP"
+          },
+          "402": {
+            "description": "Payment required - $0.001 USDC on Base"
+          }
+        }
+      }
+    },
+    "/v1/whois": {
+      "get": {
+        "operationId": "lookupWhois",
+        "summary": "Domain WHOIS via RDAP: age, registrar, expiry, nameservers",
+        "x-payment-info": {
+          "scheme": "exact",
+          "network": "eip155:8453",
+          "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+          "amount": "1000",
+          "payTo": "0x3B5eC5a983576FCD98275Ff1604a1182ec5B5617",
+          "description": "$0.001 USDC on Base per call"
+        },
+        "parameters": [
+          {
+            "name": "domain",
+            "in": "query",
+            "required": true,
+            "description": "Domain name to look up via RDAP (age, registrar, expiry, nameservers)",
+            "schema": {
+              "type": "string",
+              "description": "Domain name to look up via RDAP (age, registrar, expiry, nameservers)",
+              "example": "example.com"
+            },
+            "example": "example.com"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Domain WHOIS result (paid)"
+          },
+          "400": {
+            "description": "Invalid domain"
+          },
+          "402": {
+            "description": "Payment required - $0.001 USDC on Base"
+          }
+        }
+      }
+    },
+    "/v1/qr": {
+      "get": {
+        "operationId": "generateQr",
+        "summary": "QR code PNG generator",
+        "x-payment-info": {
+          "scheme": "exact",
+          "network": "eip155:8453",
+          "asset": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+          "amount": "1000",
+          "payTo": "0x3B5eC5a983576FCD98275Ff1604a1182ec5B5617",
+          "description": "$0.001 USDC on Base per call"
+        },
+        "parameters": [
+          {
+            "name": "text",
+            "in": "query",
+            "required": true,
+            "description": "Text to encode into the QR code PNG",
+            "schema": {
+              "type": "string",
+              "description": "Text to encode into the QR code PNG",
+              "example": "hello"
+            },
+            "example": "hello"
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "required": false,
+            "description": "QR image size in pixels, e.g. 200x200 (default 200x200, max 1000)",
+            "schema": {
+              "type": "string",
+              "description": "QR image size in pixels, e.g. 200x200 (default 200x200, max 1000)",
+              "example": "200x200"
+            },
+            "example": "200x200"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "QR code PNG image (paid)",
+            "content": {
+              "image/png": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Missing text param"
+          },
+          "402": {
+            "description": "Payment required - $0.001 USDC on Base"
+          }
+        }
+      }
+    }
+  }
+}

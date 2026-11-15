@@ -1,0 +1,4 @@
+name = "bsc-agent-utilities"
+main = "worker.mjs"
+compatibility_date = "2026-11-06"
+# Deploy: wrangler deploy   (needs a Cloudflare account login — see STATUS.md)

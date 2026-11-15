@@ -1,0 +1,12 @@
+{
+  "name": "bsc-agent-utilities-x402",
+  "version": "2.0.0",
+  "type": "module",
+  "description": "BSC agent utilities, pay-per-call $0.001-0.002 USDC on Base via x402: gas, token price, tx status, contract check",
+  "scripts": {
+    "start": "node server.mjs"
+  },
+  "devDependencies": {
+    "ethers": "^6.17.0"
+  }
+}
